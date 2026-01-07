@@ -88,12 +88,15 @@ Get the current balance for a user.
 
 You may refactor the service if needed, but minimal changes are preferred.
 
+**Note:** Please ensure your code is well-documented with clear comments explaining your approach and any complex logic.
+
 ---
 
 ## Notes
 
 - The storage is intentionally in-memory.
 - There is no single "correct" solution.
+- You may update this README if required to document your changes.
 
 ---
 
