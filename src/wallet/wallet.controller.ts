@@ -1,30 +1,28 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { WalletService } from './wallet.service';
 import { AmountDto } from './dto/amount.dto';
+import { BalanceQueryDto } from './dto/balance-query.dto';
+import { WalletService } from './wallet.service';
 
 @Controller('wallet')
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 
   @Get('balance')
-  getBalance(@Query('userId') userId: string) {
+  getBalance(@Query() query: BalanceQueryDto) {
     return {
-      balance: this.walletService.getBalance(userId),
+      balance: this.walletService.getBalance(query.userId),
     };
   }
 
   @Post('credit')
-  credit(@Body() body: AmountDto) {
-    return {
-      balance: this.walletService.credit(body.userId, body.amount),
-    };
+  async credit(@Body() body: AmountDto) {
+    const balance = await this.walletService.credit(body.userId, body.amount);
+    return { balance };
   }
 
   @Post('debit')
   async debit(@Body() body: AmountDto) {
-    const wallet = await this.walletService.debit(body.userId, body.amount);
-    return {
-      balance: wallet.balance,
-    };
+    const balance = await this.walletService.debit(body.userId, body.amount);
+    return { balance };
   }
 }

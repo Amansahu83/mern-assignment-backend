@@ -100,6 +100,15 @@ You may refactor the service if needed, but minimal changes are preferred.
 
 ---
 
+## changes made
+
+- **Validation:** Request bodies (credit/debit) and query params (GET balance) are validated via `class-validator` and a global `ValidationPipe`. Invalid or missing `userId`/`amount` result in `400 Bad Request`. Amount must be a positive integer.
+- **Wallet creation:** The first credit for a given `userId` creates that user’s wallet (initial balance 0, then the credited amount). Debit still returns `400` if the wallet does not exist.
+- **Concurrency:** In-memory per-user locking serializes credit and debit for the same user so that concurrent requests cannot over-deduct (e.g. two debits both passing the balance check). Operations for different users are not blocked.
+- **Amounts:** Amounts are treated as integers in the smallest currency unit (e.g. cents) to avoid floating-point rounding issues.
+
+---
+
 ## Submission
 
 - Fork this repository and share the link on email.
